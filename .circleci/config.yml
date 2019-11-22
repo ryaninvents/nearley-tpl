@@ -1,0 +1,161 @@
+---
+version: 2.1
+orbs:
+  pnpm:
+    executors:
+      default:
+        docker:
+          - image: 'circleci/node:12'
+    commands:
+      install:
+        parameters:
+          args:
+            description: Command-line args to pass to pnpm
+            type: string
+            default: ''
+        steps:
+          - run:
+              name: install
+              command: pnpm install <<parameters.args>>
+      build:
+        parameters:
+          args:
+            description: Command-line args to pass to pnpm
+            type: string
+            default: ''
+        steps:
+          - run:
+              name: install
+              command: pnpm run build <<parameters.args>>
+      test:
+        parameters:
+          args:
+            description: Command-line args to pass to pnpm
+            type: string
+            default: ''
+        steps:
+          - run:
+              name: install
+              command: pnpm test <<parameters.args>>
+      script:
+        parameters:
+          args:
+            description: Command-line args to pass to pnpm
+            type: string
+            default: ''
+        steps:
+          - run:
+              name: install
+              command: pnpm run <<parameters.args>>
+    jobs:
+      install:
+        parameters:
+          args:
+            description: Command-line args to pass to pnpm
+            type: string
+            default: ''
+        executor: default
+        steps:
+          - install:
+              args: <<parameters.args>>
+      build:
+        parameters:
+          args:
+            description: Command-line args to pass to pnpm
+            type: string
+            default: ''
+        executor: default
+        steps:
+          - build:
+              args: <<parameters.args>>
+      test:
+        parameters:
+          args:
+            description: Command-line args to pass to pnpm
+            type: string
+            default: ''
+        executor: default
+        steps:
+          - test:
+              args: <<parameters.args>>
+      script:
+        parameters:
+          args:
+            description: Command-line args to pass to pnpm
+            type: string
+            default: ''
+        executor: default
+        steps:
+          - script:
+              args: <<parameters.args>>
+  semantic_release:
+    commands:
+      publish:
+        steps:
+          - run:
+              name: release
+              command: pnpx semantic-release
+  self:
+    commands:
+      stash_modules:
+        steps:
+          - persist_to_workspace:
+              root: .
+              paths:
+                - node_modules/**
+                - packages/*/node_modules/**
+      unstash:
+        steps:
+          - attach_workspace:
+              at: .
+
+jobs:
+  install:
+    executor: pnpm/default
+    steps:
+      - checkout
+      - pnpm/install
+      - self/stash_modules
+  build:
+    executor: pnpm/default
+    steps:
+      - checkout
+      - self/unstash
+      - pnpm/build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - pkg/**
+  test:
+    executor: pnpm/default
+    steps:
+      - checkout
+      - self/unstash
+      - pnpm/script:
+          args: lint
+      - pnpm/test
+  release:
+    executor: pnpm/default
+    steps:
+      - checkout
+      - self/unstash
+      - semantic_release/publish
+workflows:
+  version: 2
+  main:
+    jobs:
+      - install:
+          context: gh-npm-public
+      - build:
+          context: gh-npm-public
+          requires:
+            - install
+      - test:
+          context: gh-npm-public
+          requires:
+            - install
+      - release:
+          context: gh-npm-public
+          requires:
+            - build
+            - test
