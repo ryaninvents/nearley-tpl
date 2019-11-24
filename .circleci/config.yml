@@ -5,7 +5,7 @@ orbs:
     executors:
       default:
         docker:
-          - image: 'circleci/node:12'
+          - image: 'docker.pkg.github.com/kennship/docker-node/ci:docker-base-layer'
     commands:
       install:
         parameters:
