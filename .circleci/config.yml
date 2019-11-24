@@ -15,7 +15,7 @@ orbs:
             default: ''
         steps:
           - run:
-              name: install
+              name: Install dependencies
               command: pnpm install <<parameters.args>>
       build:
         parameters:
@@ -25,7 +25,7 @@ orbs:
             default: ''
         steps:
           - run:
-              name: install
+              name: Run build step
               command: pnpm run build <<parameters.args>>
       test:
         parameters:
@@ -35,7 +35,7 @@ orbs:
             default: ''
         steps:
           - run:
-              name: install
+              name: Run tests
               command: pnpm test <<parameters.args>>
       script:
         parameters:
@@ -45,7 +45,7 @@ orbs:
             default: ''
         steps:
           - run:
-              name: install
+              name: Run script
               command: pnpm run <<parameters.args>>
     jobs:
       install:
