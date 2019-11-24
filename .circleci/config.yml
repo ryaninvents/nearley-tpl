@@ -5,7 +5,7 @@ orbs:
     executors:
       default:
         docker:
-          - image: 'docker.pkg.github.com/kennship/docker-node/ci:docker-base-layer'
+          - image: 'docker.pkg.github.com/kennship/docker-node/ci:5484cdda2b08128b3d8821436f0f16ee7b3e9a7b'
     commands:
       install:
         parameters:
