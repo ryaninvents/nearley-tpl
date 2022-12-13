@@ -29,6 +29,9 @@ export default function tokenize(
 
   function processElement(elem) {
     if (typeof elem !== 'string') {
+      // `line` and `col` are less helpful than usual, since we don't have access to the
+      // full source file -- `line` and `col` are only reported within the context
+      // of the string passed to the parser.
       result.push({
         line: savedMooState.line || 0,
         col: savedMooState.col || 0,

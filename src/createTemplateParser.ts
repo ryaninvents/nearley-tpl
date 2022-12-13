@@ -25,6 +25,10 @@ export default function createTemplateParser(): Parser<
   return new Parser(
     Grammar.fromCompiled({
       ...expandedGrammarRules,
+      // We never expose this raw parser to consumers -- the only way that
+      // this package is intended to be used is via the `index.ts` file, which
+      // pre-tokenizes the input before handing it off to the parser.
+      // Use `NullLexer` so we can correctly consume this pre-tokenized input.
       Lexer: new NullLexer(),
     })
   );

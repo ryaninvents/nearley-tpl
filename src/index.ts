@@ -4,6 +4,9 @@ import tokenize from './tokenize';
 import createTemplateParser from './createTemplateParser';
 import defaultPostprocessors from './postprocessors';
 
+/**
+ * Create a template string tag for custom Nearley parsers.
+ */
 export default function createParser({
   postprocessors: inputPostprocessors = {},
 } = {}) {

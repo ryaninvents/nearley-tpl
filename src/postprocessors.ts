@@ -1,5 +1,6 @@
 import { BuiltinPostprocessorName, PostprocessorFunction } from 'nearley';
 
+/** Standard Nearley postprocessors, copied here for convenience */
 export default {
   joiner: (d) => d.join(''),
   arrconcat: ([a, b]) => [a, ...b],
