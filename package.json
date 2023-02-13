@@ -64,7 +64,7 @@
     "@types/jest": "^24.0.23",
     "@types/moo": "^0.5.0",
     "@types/nearley": "^2.11.0",
-    "@types/node": "^12.12.11",
+    "@types/node": "^18.13.0",
     "@typescript-eslint/parser": "^2.8.0",
     "babel-eslint": "^10.0.3",
     "eslint": "5.16.0",
